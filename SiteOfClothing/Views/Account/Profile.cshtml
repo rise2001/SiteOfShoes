@@ -1,0 +1,43 @@
+﻿@model SiteOfShoes.Entities.Accounting.User
+
+<div class="container">
+        <div class="display-3">Профиль</div>
+        <br />
+        <br />
+        <h3>@Model.Name</h3>
+        <ul>
+            @if(Model.Email != null) 
+                {<li>Почта: @Model.Email</li>}
+        </ul>
+        
+        <div class="display-4">История заказов</div>
+        <br />
+        @foreach(var item in ViewBag.Orders){
+            <div class="card mb-4">
+                    <div class="card-body">
+                    <p><strong>Заказ №@item.Id</strong></p>
+                    <p class="mb-0">Стоимость: @item.Cost р.</p>
+                    <p class="mb-0">Статус: @item.OrderStatus.Name</p>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Название</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var order in ViewBag.Orders)
+                                {
+                                    @foreach (var orderItem in order.OrderItems){
+                                        <tr>
+                                            <th scope="row">@order.Id</th>
+                                            <td>@orderItem.Product.Name</td>
+                                        </tr>
+                                    }
+                                }
+                        </tbody>
+                    </table>
+                    </div>
+            </div>
+        }
+</div>

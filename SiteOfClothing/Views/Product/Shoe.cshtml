@@ -1,0 +1,63 @@
+﻿@model SiteOfShoes.Entities.Products.Shoes.Shoe
+
+
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <img class="w-100 rounded" src="@Model.PhotoLink" />
+        </div>
+        <div class="col-8">
+            <div class="display-3">@Model.Name</div>
+            <h5>@Html.ActionLink(Model.TypeOfShoe.Name, "ShoeCatalog", "Catalog", new {type = Model.TypeOfShoe.Name})</h5>
+            <br />
+            <ul>
+
+                @if (Model.Manufacturer != null)
+                {
+        <li>Производитель: @Model.Manufacturer</li>}
+                @if (Model.Material != null)
+                {
+        <li>Материал: @Model.Material</li>}
+                @if (Model.TypeOfDestination != null)
+                {
+        <li>Тип назначения: @Model.TypeOfDestination.Name</li>}
+                @if (Model.TypeOfSeason != null)
+                {
+        <li>Тип сезона: @Model.TypeOfSeason.Name</li>}
+                @if (Model.TypeOfSex != null)
+                {
+        <li>Пол: @Model.TypeOfSex.Name</li>}
+                @if (Model.Color != null)
+                {
+        <li>Цвет: @Model.Color</li>}
+                @if (Model.SizesOfShoe != null)
+                {
+                    <li> Доступные размеры :
+                    @foreach (SiteOfShoes.Entities.ProductTypes.Shoes.SizeOfShoe size in Model.SizesOfShoe)
+                    {
+                        <span class="badge badge-primary" style="color: black;">@size.Name</span>
+                    }
+                    @*<select id = "SizeOfShoe" asp-for="SizeOfShoeId">
+                    <option disabled value="0">Не выбрано</option>}
+                    @foreach (SiteOfShoes.Entities.ProductTypes.Shoes.SizeOfShoe size in Model.SizesOfShoe)
+                    {
+                        <option value="@size.Id">@size.Name</option>
+                    }
+                    </select>*@
+                    </li>
+                }
+
+        </ul>
+        <br />
+       <h2 class="d-inline-block"><span style=“color: black;”>@Model.Costs[Model.Costs.Count-1].Cost р.</span></h2>
+        <div class="text-center"><a id="BuyButton" class="btn btn-outline-dark mt-auto" href="@Url.Action("AddToCart", "Ordering", new { id = Model.Id})">В корзину</a></div>            
+        <br />
+        </div>
+        <div>
+            <div class="display-4">О товаре</div>
+            <br />
+            <p>@Model.Description</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+﻿@model IEnumerable<SiteOfShoes.Entities.ProductTypes.Shoes.TypeOfShoe>
+
+@foreach (var item in Model)
+            {
+                @Html.ActionLink(item.Name, "ShoeCatalog", "Catalog", new {type = item.Name} )
+                <span>&nbsp;</span>
+            }

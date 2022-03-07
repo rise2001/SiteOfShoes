@@ -1,0 +1,77 @@
+﻿@model SiteOfShoes.Models.Products.ShoeModel
+@{
+    Layout = "_AdminLayout";
+}
+
+<div class="container">
+    <h2>Добавление обуви:</h2>
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="Name">Название:</label>
+            <input asp-for="Name" class="form-control" placeholder="Ботинок">
+        </div>
+        <div class="form-group">
+            <label asp-for="PhotoLink">Ссылка на фото</label>
+            <input asp-for="PhotoLink" class="form-control" placeholder="hhtp://tagduck.jpg">
+        </div>
+        <div class="form-group">
+            <label asp-for="Manufacturer">Производитель</label>
+            <input asp-for="Manufacturer" class="form-control" placeholder="ООО Рога и копыта">
+        </div>
+        <div class="form-group">
+            <select asp-for="TypeOfShoeId" class="custom-select">
+                <option> Тип обуви</option>
+                @foreach (SiteOfShoes.Entities.ProductTypes.Shoes.TypeOfShoe type in ViewBag.TypesOfShoe)
+                {
+    <option value="@type.Id">@type.Name</option>}
+            </select>
+        </div>
+        <div class="form-group">
+            <select asp-for="TypeOfSeasonId" class="custom-select">
+                <option> Сезонность</option>
+                @foreach (SiteOfShoes.Entities.ProductTypes.Shoes.TypeOfSeason type in ViewBag.TypesOfSeason)
+                {
+    <option value="@type.Id">@type.Name</option>
+}
+            </select>
+        </div>
+        <div class="form-group">
+            <select asp-for="TypeOfSexId" class="custom-select">
+                <option> Пол</option>
+                @foreach (SiteOfShoes.Entities.ProductTypes.Shoes.TypeOfSex type in ViewBag.TypesOfSex)
+                {
+    <option value="@type.Id">@type.Name</option>}
+            </select>
+        </div>
+        <div class="form-group">
+            <select asp-for="TypeOfDestinationId" class="custom-select">
+                <option>Назначение</option>
+                @foreach (SiteOfShoes.Entities.ProductTypes.Shoes.TypeOfDestination type in ViewBag.TypesOfDestination)
+                {
+                    <option value="@type.Id">@type.Name</option>}
+            </select>
+        </div>
+        <div class="form-group">
+            <select asp-for="SizesOfShoeIds" multiple="multiple" >
+            @foreach (SiteOfShoes.Entities.ProductTypes.Shoes.SizeOfShoe size in ViewBag.SizesOfShoe)
+            {
+                <option value="@size.Id">@size.Name</option>}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Color">Цвет</label>
+            <input asp-for="Color" class="form-control" placeholder="Синий">
+        </div>
+        <div class="form-group">
+            <label asp-for="Description">Описание</label>
+            <input asp-for="Description" class="form-control" placeholder="ООО Рога и копыта">
+        </div>
+        <div class="form-group">
+            <label asp-for="Cost">Цена:</label>
+            <input asp-for="Cost" class="form-control" placeholder="123" />
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить</button>
+    </form>
+</div>
+

@@ -1,0 +1,19 @@
+﻿@model SiteOfShoes.Entities.ProductTypes.Shoes.TypeOfDestination
+@{
+    Layout = "_AdminLayout";
+}
+
+<div class="container">
+
+    <h2>Добавление направленности использования ботинок:</h2>
+    <form method="post">
+      <div class="form-group">
+        <label asp-for="Name">Название:</label>
+        <input asp-for="Name" class="form-control" placeholder="Для болот">
+      </div>
+      <button type="submit" class="btn btn-primary">Добавить</button>
+    </form>
+</div>
+
+
+

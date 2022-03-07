@@ -1,0 +1,39 @@
+﻿@model IEnumerable<SiteOfShoes.Models.Products.ShoeModel>
+@{
+    Layout = "_AdminLayout";
+}
+
+<a class="badge badge-primary" href="@Url.Action("AddShoe")">Добавить обувь</a>
+<h2>Список обуви:</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Название</th>
+            <th>Тип обуви</th>
+            <th>Тип назначения</th>
+            <th>Сезонность</th>
+            <th>Пол</th>
+            <th>Цена</th>
+        </tr>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (SiteOfShoes.Models.Products.ShoeModel shoe in Model)
+        {
+            <tr>
+                <th scope="row">@shoe.Id</th>
+                <td>@shoe.Name</td>
+                <td>@shoe.TypeOfShoe.Name</td>
+                <td>@shoe.TypeOfDestination.Name</td>
+                <td>@shoe.TypeOfSeason.Name</td>
+                <td>@shoe.TypeOfSex.Name</td>
+                <td>@shoe.Cost</td>
+                <td>
+                    @Html.ActionLink("Изменить", "EditShoe", new { id = shoe.Id }) |
+                    @Html.ActionLink("Удалить", "DeleteShoe", new { id = shoe.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

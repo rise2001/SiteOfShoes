@@ -39,7 +39,7 @@ namespace SiteOfShoes.Controllers
 
 
                 var orders = _unitOfWork.GetRepository<Order>().GetAll()
-                   .Where(order => order.UserId == user.ID).ToList();
+                   .Where(order => order.UserId == user.ID).OrderByDescending(t => t.OrderDate).ToList();
                 foreach(var order in orders)
                 {
                     foreach (var orderItem in order.OrderItems)

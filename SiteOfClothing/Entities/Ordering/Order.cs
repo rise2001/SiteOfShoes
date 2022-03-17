@@ -1,4 +1,5 @@
-﻿using SiteOfShoes.Entities.Accounting;
+﻿using System;
+using SiteOfShoes.Entities.Accounting;
 using SiteOfShoes.Entities.Products;
 using System.Collections.Generic;
 
@@ -23,5 +24,7 @@ namespace SiteOfShoes.Entities.Ordering
         public virtual OrderStatus OrderStatus { get; set; }
 
         public int? OrderStatusId;
+
+        public DateTime? OrderDate { get; set; } = DateTime.Now;
     }
 }

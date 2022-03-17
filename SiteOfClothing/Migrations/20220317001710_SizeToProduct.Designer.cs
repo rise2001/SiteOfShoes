@@ -10,8 +10,8 @@ using Data.EF.Contexts;
 namespace SiteOfShoes.Migrations
 {
     [DbContext(typeof(BaseContext))]
-    [Migration("20211226174552_AddIsDeletedProduct")]
-    partial class AddIsDeletedProduct
+    [Migration("20220317001710_SizeToProduct")]
+    partial class SizeToProduct
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,7 +32,12 @@ namespace SiteOfShoes.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("RoleID")
+                        .HasColumnType("int");
+
                     b.HasKey("ID");
+
+                    b.HasIndex("RoleID");
 
                     b.ToTable("Roles");
 
@@ -90,6 +95,143 @@ namespace SiteOfShoes.Migrations
                         });
                 });
 
+            modelBuilder.Entity("SiteOfShoes.Entities.Ordering.Cart.Cart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int?>("ShoeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShoeId");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.Ordering.Cart.CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SizeOfShoeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartItems");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.Ordering.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<double?>("Cost")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("OrderStatusId1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderStatusId1");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.Ordering.OrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<double?>("Cost")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.Ordering.OrderStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderStatuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Новый"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "В обработке"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "В доставке"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Доставлен"
+                        });
+                });
+
             modelBuilder.Entity("SiteOfShoes.Entities.ProductTypes.Shoes.SizeOfShoe", b =>
                 {
                     b.Property<int>("Id")
@@ -101,7 +243,12 @@ namespace SiteOfShoes.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("SizesOfShoe");
 
@@ -485,34 +632,15 @@ namespace SiteOfShoes.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("SalePercent")
+                        .HasColumnType("float");
+
                     b.Property<bool>("isSaled")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("SiteOfShoes.Entities.Products.Shoes.ShoeAndSizes", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("ShoeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SizeOfShoeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("ShoeId", "SizeOfShoeId");
-
-                    b.HasIndex("SizeOfShoeId");
-
-                    b.ToTable("ShoeAndSizes");
                 });
 
             modelBuilder.Entity("SiteOfShoes.Entities.Products.Shoes.Shoe", b =>
@@ -525,17 +653,25 @@ namespace SiteOfShoes.Migrations
                     b.Property<string>("Material")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TypeOfDestinationId")
+                    b.Property<int?>("SizeOfShoeId1")
                         .HasColumnType("int");
 
-                    b.Property<int>("TypeOfSeasonId")
+                    b.Property<int?>("TypeOfDestinationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TypeOfSexId")
+                    b.Property<int?>("TypeOfSeasonId")
+                        .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<int>("TypeOfShoeId")
+                    b.Property<int?>("TypeOfSexId")
+                        .IsRequired()
                         .HasColumnType("int");
+
+                    b.Property<int?>("TypeOfShoeId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.HasIndex("SizeOfShoeId1");
 
                     b.HasIndex("TypeOfDestinationId");
 
@@ -548,6 +684,13 @@ namespace SiteOfShoes.Migrations
                     b.ToTable("Shoes");
                 });
 
+            modelBuilder.Entity("SiteOfShoes.Entities.Accounting.Role", b =>
+                {
+                    b.HasOne("SiteOfShoes.Entities.Accounting.Role", null)
+                        .WithMany("Shoes")
+                        .HasForeignKey("RoleID");
+                });
+
             modelBuilder.Entity("SiteOfShoes.Entities.Accounting.User", b =>
                 {
                     b.HasOne("SiteOfShoes.Entities.Accounting.Role", "Role")
@@ -557,34 +700,84 @@ namespace SiteOfShoes.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("SiteOfShoes.Entities.Products.CostOfProduct", b =>
+            modelBuilder.Entity("SiteOfShoes.Entities.Ordering.Cart.Cart", b =>
                 {
-                    b.HasOne("SiteOfShoes.Entities.Products.Product", "Product")
+                    b.HasOne("SiteOfShoes.Entities.Products.Shoes.Shoe", null)
+                        .WithMany("Carts")
+                        .HasForeignKey("ShoeId");
+
+                    b.HasOne("SiteOfShoes.Entities.Accounting.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.Ordering.Cart.CartItem", b =>
+                {
+                    b.HasOne("SiteOfShoes.Entities.Ordering.Cart.Cart", "Cart")
+                        .WithMany("CartItems")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SiteOfShoes.Entities.Products.Shoes.Shoe", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Cart");
+
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("SiteOfShoes.Entities.Products.Shoes.ShoeAndSizes", b =>
+            modelBuilder.Entity("SiteOfShoes.Entities.Ordering.Order", b =>
                 {
-                    b.HasOne("SiteOfShoes.Entities.Products.Shoes.Shoe", "Shoe")
+                    b.HasOne("SiteOfShoes.Entities.Ordering.OrderStatus", "OrderStatus")
                         .WithMany()
-                        .HasForeignKey("ShoeId")
+                        .HasForeignKey("OrderStatusId1");
+
+                    b.HasOne("SiteOfShoes.Entities.Accounting.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("OrderStatus");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.Ordering.OrderItem", b =>
+                {
+                    b.HasOne("SiteOfShoes.Entities.Ordering.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("SiteOfShoes.Entities.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.ProductTypes.Shoes.SizeOfShoe", b =>
+                {
+                    b.HasOne("SiteOfShoes.Entities.Products.Product", null)
+                        .WithMany("SizesOfShoe")
+                        .HasForeignKey("ProductId");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.Products.CostOfProduct", b =>
+                {
+                    b.HasOne("SiteOfShoes.Entities.Products.Product", "Product")
+                        .WithMany("Costs")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SiteOfShoes.Entities.ProductTypes.Shoes.SizeOfShoe", "SizeOfShoe")
-                        .WithMany()
-                        .HasForeignKey("SizeOfShoeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Shoe");
-
-                    b.Navigation("SizeOfShoe");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("SiteOfShoes.Entities.Products.Shoes.Shoe", b =>
@@ -595,26 +788,28 @@ namespace SiteOfShoes.Migrations
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
+                    b.HasOne("SiteOfShoes.Entities.ProductTypes.Shoes.SizeOfShoe", null)
+                        .WithMany("Shoes")
+                        .HasForeignKey("SizeOfShoeId1");
+
                     b.HasOne("SiteOfShoes.Entities.ProductTypes.Shoes.TypeOfDestination", "TypeOfDestination")
-                        .WithMany()
-                        .HasForeignKey("TypeOfDestinationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Shoes")
+                        .HasForeignKey("TypeOfDestinationId");
 
                     b.HasOne("SiteOfShoes.Entities.ProductTypes.Shoes.TypeOfSeason", "TypeOfSeason")
-                        .WithMany()
+                        .WithMany("Shoes")
                         .HasForeignKey("TypeOfSeasonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SiteOfShoes.Entities.ProductTypes.Shoes.TypeOfSex", "TypeOfSex")
-                        .WithMany()
+                        .WithMany("Shoes")
                         .HasForeignKey("TypeOfSexId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SiteOfShoes.Entities.ProductTypes.Shoes.TypeOfShoe", "TypeOfShoe")
-                        .WithMany()
+                        .WithMany("Shoes")
                         .HasForeignKey("TypeOfShoeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -626,6 +821,58 @@ namespace SiteOfShoes.Migrations
                     b.Navigation("TypeOfSex");
 
                     b.Navigation("TypeOfShoe");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.Accounting.Role", b =>
+                {
+                    b.Navigation("Shoes");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.Ordering.Cart.Cart", b =>
+                {
+                    b.Navigation("CartItems");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.Ordering.Order", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.ProductTypes.Shoes.SizeOfShoe", b =>
+                {
+                    b.Navigation("Shoes");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.ProductTypes.Shoes.TypeOfDestination", b =>
+                {
+                    b.Navigation("Shoes");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.ProductTypes.Shoes.TypeOfSeason", b =>
+                {
+                    b.Navigation("Shoes");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.ProductTypes.Shoes.TypeOfSex", b =>
+                {
+                    b.Navigation("Shoes");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.ProductTypes.Shoes.TypeOfShoe", b =>
+                {
+                    b.Navigation("Shoes");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.Products.Product", b =>
+                {
+                    b.Navigation("Costs");
+
+                    b.Navigation("SizesOfShoe");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.Products.Shoes.Shoe", b =>
+                {
+                    b.Navigation("Carts");
                 });
 #pragma warning restore 612, 618
         }

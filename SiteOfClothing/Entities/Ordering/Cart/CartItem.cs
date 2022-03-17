@@ -15,6 +15,10 @@ namespace SiteOfShoes.Entities.Ordering.Cart
         public virtual Cart Cart { get; set; }
 
         public int CartId { get; set; }
+        
+        public virtual SizeOfShoe SizeOfProduct { get; set; }
+        
+        public int? SizeOfProductId { get; set; }
 
         public int SizeOfShoeId { get; set; } = -1;
     }

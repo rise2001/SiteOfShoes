@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SiteOfShoes.EF.Contexts;
+using Data.EF.Contexts;
 
 namespace SiteOfShoes.Migrations
 {
@@ -18,21 +18,6 @@ namespace SiteOfShoes.Migrations
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
-
-            modelBuilder.Entity("ShoeSizeOfShoe", b =>
-                {
-                    b.Property<int>("ShoesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SizesOfShoeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ShoesId", "SizesOfShoeId");
-
-                    b.HasIndex("SizesOfShoeId");
-
-                    b.ToTable("ShoeSizeOfShoe");
-                });
 
             modelBuilder.Entity("SiteOfShoes.Entities.Accounting.Role", b =>
                 {
@@ -143,6 +128,9 @@ namespace SiteOfShoes.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SizeOfProductId")
+                        .HasColumnType("int");
+
                     b.Property<int>("SizeOfShoeId")
                         .HasColumnType("int");
 
@@ -151,6 +139,8 @@ namespace SiteOfShoes.Migrations
                     b.HasIndex("CartId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("SizeOfProductId");
 
                     b.ToTable("CartItems");
                 });
@@ -199,11 +189,16 @@ namespace SiteOfShoes.Migrations
                     b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SizeOfProductId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("SizeOfProductId");
 
                     b.ToTable("OrderItems");
                 });
@@ -256,7 +251,12 @@ namespace SiteOfShoes.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("SizesOfShoe");
 
@@ -661,6 +661,9 @@ namespace SiteOfShoes.Migrations
                     b.Property<string>("Material")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SizeOfShoeId1")
+                        .HasColumnType("int");
+
                     b.Property<int?>("TypeOfDestinationId")
                         .HasColumnType("int");
 
@@ -676,6 +679,8 @@ namespace SiteOfShoes.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.HasIndex("SizeOfShoeId1");
+
                     b.HasIndex("TypeOfDestinationId");
 
                     b.HasIndex("TypeOfSeasonId");
@@ -685,21 +690,6 @@ namespace SiteOfShoes.Migrations
                     b.HasIndex("TypeOfShoeId");
 
                     b.ToTable("Shoes");
-                });
-
-            modelBuilder.Entity("ShoeSizeOfShoe", b =>
-                {
-                    b.HasOne("SiteOfShoes.Entities.Products.Shoes.Shoe", null)
-                        .WithMany()
-                        .HasForeignKey("ShoesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SiteOfShoes.Entities.ProductTypes.Shoes.SizeOfShoe", null)
-                        .WithMany()
-                        .HasForeignKey("SizesOfShoeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("SiteOfShoes.Entities.Accounting.Role", b =>
@@ -745,9 +735,15 @@ namespace SiteOfShoes.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SiteOfShoes.Entities.ProductTypes.Shoes.SizeOfShoe", "SizeOfProduct")
+                        .WithMany()
+                        .HasForeignKey("SizeOfProductId");
+
                     b.Navigation("Cart");
 
                     b.Navigation("Product");
+
+                    b.Navigation("SizeOfProduct");
                 });
 
             modelBuilder.Entity("SiteOfShoes.Entities.Ordering.Order", b =>
@@ -775,9 +771,22 @@ namespace SiteOfShoes.Migrations
                         .WithMany()
                         .HasForeignKey("ProductId");
 
+                    b.HasOne("SiteOfShoes.Entities.ProductTypes.Shoes.SizeOfShoe", "SizeOfProduct")
+                        .WithMany()
+                        .HasForeignKey("SizeOfProductId");
+
                     b.Navigation("Order");
 
                     b.Navigation("Product");
+
+                    b.Navigation("SizeOfProduct");
+                });
+
+            modelBuilder.Entity("SiteOfShoes.Entities.ProductTypes.Shoes.SizeOfShoe", b =>
+                {
+                    b.HasOne("SiteOfShoes.Entities.Products.Product", null)
+                        .WithMany("SizesOfShoe")
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("SiteOfShoes.Entities.Products.CostOfProduct", b =>
@@ -798,6 +807,10 @@ namespace SiteOfShoes.Migrations
                         .HasForeignKey("SiteOfShoes.Entities.Products.Shoes.Shoe", "Id")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
+
+                    b.HasOne("SiteOfShoes.Entities.ProductTypes.Shoes.SizeOfShoe", null)
+                        .WithMany("Shoes")
+                        .HasForeignKey("SizeOfShoeId1");
 
                     b.HasOne("SiteOfShoes.Entities.ProductTypes.Shoes.TypeOfDestination", "TypeOfDestination")
                         .WithMany("Shoes")
@@ -845,6 +858,11 @@ namespace SiteOfShoes.Migrations
                     b.Navigation("OrderItems");
                 });
 
+            modelBuilder.Entity("SiteOfShoes.Entities.ProductTypes.Shoes.SizeOfShoe", b =>
+                {
+                    b.Navigation("Shoes");
+                });
+
             modelBuilder.Entity("SiteOfShoes.Entities.ProductTypes.Shoes.TypeOfDestination", b =>
                 {
                     b.Navigation("Shoes");
@@ -868,6 +886,8 @@ namespace SiteOfShoes.Migrations
             modelBuilder.Entity("SiteOfShoes.Entities.Products.Product", b =>
                 {
                     b.Navigation("Costs");
+
+                    b.Navigation("SizesOfShoe");
                 });
 
             modelBuilder.Entity("SiteOfShoes.Entities.Products.Shoes.Shoe", b =>

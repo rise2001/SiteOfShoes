@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Arch.EntityFrameworkCore.UnitOfWork.Collections;
-using SiteOfShoes.EF.Contexts;
+using Data.EF.Contexts;
 using Arch.EntityFrameworkCore.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -46,6 +46,7 @@ namespace SiteOfShoes
             services
                 .AddDbContext<BaseContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DefaultConnection")))
                 .AddUnitOfWork<BaseContext>();
+            
         }
 
 

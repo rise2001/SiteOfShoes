@@ -1,5 +1,17 @@
 ﻿@model SiteOfShoes.Entities.Ordering.Cart.Cart
 
+<script>
+    function removeProductFromCart(cartId){
+        $.ajax({
+            url: `https://localhost:44334/api/CartItem/${cartId}`,
+            method: 'Post',
+            success: function(data) {
+                location.reload();
+            }
+        });
+    }
+</script>
+
 <div class="container">
     <section class="h-100 h-custom">
         <div class="container py-5 h-100">
@@ -18,21 +30,41 @@
                         @foreach(var item in Model.CartItems){
                             <hr class="my-4">
 
+                            <script>
+                                function changeProductSize() {
+                                    var newId = $("#@(item.Id + "_select")").val();
+                                    $.ajax({
+                                        url: `https://localhost:44334/api/CartItem/${@item.Id}/${newId}`,
+                                        method: 'Get',
+                                        success: function(data) {
+                                        }
+                                    });
+                                };
+                            </script>
+
                             <div class="row mb-4 d-flex justify-content-between align-items-center">
-                            <div class="col-md-2 col-lg-2 col-xl-2">
-                                <img
-                                src="@item.Product.PhotoLink"
-                                class="img-fluid rounded-3" alt="@item.Product.Name">
-                            </div>
-                            <div class="col-md-3 col-lg-3 col-xl-3">
-                                <h6 class="text-black mb-0">@item.Product.Name</h6>
-                            </div>
-                            <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                <h6 class="mb-0">@item.Product.Costs[item.Product.Costs.Count-1].Cost. р.</h6>
-                            </div>
-                            <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                                <a href="@Url.Action("RemoveCartProduct", "Ordering", new {cartItemId = item.Id})" class="text-muted"><i class="fa fa-times"></i></a>
-                            </div>
+                                <div class="col-md-2 col-lg-2 col-xl-2">
+                                    <img
+                                        src="@item.Product.PhotoLink"
+                                        class="img-fluid rounded-3" alt="@item.Product.Name">
+                                </div>
+                                <div class="col-md-3 col-lg-3 col-xl-3">
+                                    <h6 class="text-black mb-0">@item.Product.Name</h6>
+                                </div>
+                                <div class="col-md-3 col-lg-3 col-xl-3">
+                                    <select id="@(item.Id + "_select")" onchange="changeProductSize()" class="custom-select">
+                                        <option> Размер</option>
+                                        @foreach (SiteOfShoes.Entities.ProductTypes.Shoes.SizeOfShoe size in item.Product.SizesOfShoe)
+                                        {
+                                            <option value="@size.Id">@size.Name</option>}
+                                    </select>
+                                </div>  
+                                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                    <h6 class="mb-0">@item.Product.Costs[item.Product.Costs.Count-1].Cost. р.</h6>
+                                </div>
+                                <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                    <a onclick="removeProductFromCart(@item.Id)" class="text-muted" style="cursor: pointer;"><i class="fa fa-times"></i></a>
+                                </div>
                             </div>
                         }
                         @*End*@

@@ -43,7 +43,7 @@ namespace WebUI.Controllers
             foreach (var cartItem in cart.CartItems)
             {
                 var product = (Product)cartItem.Product;
-                var orderItem = new OrderItem() { Order = order, Product = product, Cost = product.Costs[product.Costs.Count-1].Cost };
+                var orderItem = new OrderItem() { Order = order, Product = product, Cost = product.Costs[product.Costs.Count-1].Cost, SizeOfProductId = cartItem.SizeOfProductId};
                 order.OrderItems.Add(orderItem);
             }
             order.OrderStatus = _unitOfWork.GetRepository<OrderStatus>().Find(1);

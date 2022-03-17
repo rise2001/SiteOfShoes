@@ -12,7 +12,7 @@ using SiteOfShoes.Entities.Products;
 using SiteOfShoes.Entities.Products.Shoes;
 using SiteOfShoes.Entities.ProductTypes.Shoes;
 
-namespace SiteOfShoes.EF.Contexts
+namespace Data.EF.Contexts
 {
     public class BaseContext : DbContext
     {

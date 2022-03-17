@@ -1,6 +1,7 @@
 ﻿
 
 using SiteOfShoes.Entities.Products;
+using SiteOfShoes.Entities.ProductTypes.Shoes;
 
 namespace SiteOfShoes.Entities.Ordering
 {
@@ -27,6 +28,15 @@ namespace SiteOfShoes.Entities.Ordering
         /// </summary>
         public int? OrderId { get; set; }
 
+        /// <summary>
+        /// Получает или задает размер товара
+        /// </summary>
+        public virtual SizeOfShoe SizeOfProduct { get; set; }
+
+        /// <summary>
+        /// Получает или задает Id размера товара
+        /// </summary>
+        public int? SizeOfProductId { get; set; }
         /// <summary>
         /// Получает или задает цену
         /// </summary>

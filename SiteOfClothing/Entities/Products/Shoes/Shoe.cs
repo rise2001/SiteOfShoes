@@ -12,7 +12,6 @@ namespace SiteOfShoes.Entities.Products.Shoes
 {
     public class Shoe : Product
     {
-        public virtual List<SizeOfShoe> SizesOfShoe { get; set; } = new List<SizeOfShoe>();
         public virtual List<Cart> Carts { get; set; } = new List<Cart>();
 
 
@@ -44,9 +43,6 @@ namespace SiteOfShoes.Entities.Products.Shoes
         public int? TypeOfDestinationId { get; set; }
 
         public string Color { get; set; }
-
-        [NotMapped]
-        public int SizeOfShoeId { get; set; }
 
 
         public void UpdateByShoeModel(ShoeModel model, IUnitOfWork unityOfWork)

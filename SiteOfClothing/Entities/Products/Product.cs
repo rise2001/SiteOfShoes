@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using SiteOfShoes.Entities.ProductTypes.Shoes;
 
 namespace SiteOfShoes.Entities.Products
 {
     public class Product
     {
+        public virtual List<SizeOfShoe> SizesOfShoe { get; set; } = new List<SizeOfShoe>();
         public virtual List<CostOfProduct> Costs { get; set; } = new List<CostOfProduct>(); // Цены на товар    
 
         /// <summary>
@@ -49,5 +52,8 @@ namespace SiteOfShoes.Entities.Products
 
         public bool IsDeleted { get; set; } = false;
 
+
+        [NotMapped]
+        public int SizeOfShoeId { get; set; }
     }
 }

@@ -5,11 +5,11 @@ using SiteOfShoes.Entities.Accounting;
 using SiteOfShoes.Entities.Products.Shoes;
 using SiteOfShoes.Entities.ProductTypes.Shoes;
 using System.Linq;
-using SiteOfShoes.EF;
+using Data.EF;
 using SiteOfShoes.Models.Products;
 using System.Collections.Generic;
 using SiteOfShoes.Entities.Products;
-using SiteOfShoes.EF;
+using Data.EF;
 using Microsoft.AspNetCore.Authorization;
 
 namespace SiteOfShoes.Controllers
